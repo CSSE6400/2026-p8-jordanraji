@@ -23,6 +23,8 @@ RUN pipx run poetry install --no-root
 COPY bin bin
 COPY todo todo
 
+RUN chmod 777 /app/bin/docker-entrypoint.sh
+
 # Running our application
 ENTRYPOINT ["/app/bin/docker-entrypoint.sh"]
 CMD ["serve"]

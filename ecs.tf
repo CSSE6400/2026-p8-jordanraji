@@ -28,9 +28,7 @@ resource "aws_ecs_task_definition" "taskoverflow" {
     "environment": [
       {
         "name": "SQLALCHEMY_DATABASE_URI",
-        "value": "postgresql://${local.database_username}:${local.database_password}@${aws_db_instance.taskoverflow_database.address}:${aws_db_instance.taskoverflow_database.port}/${aws_db_instance.taskoverflow_database.db_name}"
-# The following to use psycopg v3.
-#        "value": "postgresql+psycopg://${local.database_username}:${local.database_password}@${aws_db_instance.taskoverflow_database.address}:${aws_db_instance.taskoverflow_database.port}/${aws_db_instance.taskoverflow_database.db_name}"
+        "value": "postgresql+psycopg://${local.database_username}:${local.database_password}@${aws_db_instance.taskoverflow_database.address}:${aws_db_instance.taskoverflow_database.port}/${aws_db_instance.taskoverflow_database.db_name}"
       }
     ],
     "logConfiguration": {
@@ -46,6 +44,9 @@ resource "aws_ecs_task_definition" "taskoverflow" {
 ]
 DEFINITION
 }
+
+# The following to use psycopg v3.
+#        "value": "postgresql+psycopg://${local.database_username}:${local.database_password}@${aws_db_instance.taskoverflow_database.address}:${aws_db_instance.taskoverflow_database.port}/${aws_db_instance.taskoverflow_database.db_name}"
 
 resource "aws_ecs_service" "taskoverflow" {
   name            = "taskoverflow"

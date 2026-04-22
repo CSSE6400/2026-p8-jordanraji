@@ -1,6 +1,6 @@
 locals {
-    database_username = "administrator"
-    database_password = "VerySecurePassword123XYZ"
+  database_username = "administrator"
+  database_password = "VerySecurePassword123XYZ"
 }
 
 resource "aws_db_instance" "taskoverflow_database" {
@@ -26,10 +26,10 @@ resource "aws_security_group" "taskoverflow_database" {
   description = "Allow inbound Postgres traffic"
 
   ingress {
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

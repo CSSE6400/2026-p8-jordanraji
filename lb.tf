@@ -1,9 +1,9 @@
 resource "aws_lb_target_group" "taskoverflow" {
-  name          = "taskoverflow"
-  port          = 6400
-  protocol      = "HTTP"
-  vpc_id        = aws_security_group.taskoverflow.vpc_id
-  target_type   = "ip"
+  name        = "taskoverflow"
+  port        = 6400
+  protocol    = "HTTP"
+  vpc_id      = aws_security_group.taskoverflow.vpc_id
+  target_type = "ip"
 
   health_check {
     path                = "/api/v1/health"
@@ -29,17 +29,24 @@ resource "aws_security_group" "taskoverflow_lb" {
   description = "TaskOverflow Load Balancer Security Group"
 
   ingress {
-    from_port     = 80
-    to_port       = 80
-    protocol      = "tcp"
-    cidr_blocks   = ["0.0.0.0/0"]
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port     = 0
-    to_port       = 0
-    protocol      = "-1"
-    cidr_blocks   = ["0.0.0.0/0"]
+    from_port       = 6400
+    to_port         = 6400
+    protocol        = "tcp"
+    security_groups = [aws_security_group.taskoverflow.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -48,17 +55,17 @@ resource "aws_security_group" "taskoverflow_lb" {
 }
 
 resource "aws_lb_listener" "taskoverflow" {
-  load_balancer_arn   = aws_lb.taskoverflow.arn
-  port                = "80"
-  protocol            = "HTTP"
+  load_balancer_arn = aws_lb.taskoverflow.arn
+  port              = "80"
+  protocol          = "HTTP"
 
   default_action {
-    type              = "forward"
-    target_group_arn  = aws_lb_target_group.taskoverflow.arn
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.taskoverflow.arn
   }
 }
 
 output "taskoverflow_dns_name" {
-  value = "http://${aws_lb.taskoverflow.dns_name}"
+  value       = "http://${aws_lb.taskoverflow.dns_name}"
   description = "DNS name of the TaskOverflow load balancer."
 }
